@@ -1,0 +1,30 @@
+﻿@model PatientScreeningSystem.Models.Patient
+
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<h2 class="text-center">Patient Details</h2>
+
+<div class="container">
+    <h3>@Model.Name</h3>
+    <p><strong>Age:</strong> @Model.Age</p>
+    <p><strong>Gender:</strong> @Model.Gender</p>
+    <p><strong>Address:</strong> @Model.Address</p>
+    <p><strong>Aadhaar Number:</strong> @Model.AadhaarNumber</p>
+    <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+    <p><strong>Blood Group:</strong> @Model.BloodGroup</p>
+    <p><strong>Department:</strong> @Model.Department</p>
+    <p><strong>Reason for Visit:</strong> @Model.ReasonForVisit</p>
+    <p><strong>Entry Time:</strong> @Model.EntryTime</p>
+
+    <div class="text-center">
+        <button onclick="printPage()" class="btn btn-primary">Download as PDF</button>
+    </div>
+</div>
+
+<script>
+    function printPage() {
+        window.print(); // This will open the print dialog
+    }
+</script>

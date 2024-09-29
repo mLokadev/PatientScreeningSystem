@@ -5,28 +5,39 @@ namespace PatientScreeningSystem.Models
 {
     public class Patient
     {
-        [Key]
-        public int PatientId { get; set; }  // Auto-generated primary key
+        public int PatientId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters.")]
         public string Name { get; set; }
 
-        [Required]
-        [Range(0, 120)]
+        [Required(ErrorMessage = "Age is required.")]
+        [Range(0, 120, ErrorMessage = "Please enter a valid age.")]
         public int Age { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Gender is required.")]
         public string Gender { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Address is required.")]
         public string Address { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Aadhaar Number is required.")]
+        [RegularExpression(@"^\d{12}$", ErrorMessage = "Aadhaar Number must be 12 digits.")]
         public string AadhaarNumber { get; set; }
 
-        public DateTime EntryTime { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Reason for Visit is required.")]
         public string ReasonForVisit { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required.")]
+        [Phone(ErrorMessage = "Invalid phone number.")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Blood Group is required.")]
+        public string BloodGroup { get; set; }
+
+        [Required(ErrorMessage = "Department is required.")]
+        public string Department { get; set; }
+
+        public DateTime EntryTime { get; set; }
     }
 }

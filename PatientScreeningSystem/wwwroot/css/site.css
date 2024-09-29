@@ -1,28 +1,126 @@
 body {
-    background-color: #f8f9fa; /* Light background color */
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Ash color for outer background */
 }
 
-h2 {
-    margin-top: 20px; /* Spacing above the header */
-    color: #007bff; /* Primary color */
-}
-
-.form-group label {
-    font-weight: bold; /* Bold labels */
-}
-
-.btn-primary {
-    background-color: #007bff; /* Custom primary button color */
-    border: none; /* No border */
-}
-
+/* Custom styles for the navbar */
 .navbar {
-    margin-bottom: 20px; /* Space below the navbar */
+    min-height: 50px; /* Adjust this value for the desired navbar height */
+}
+
+.navbar-brand {
+    font-size: 1.25rem; /* Adjust font size for better visibility */
+}
+
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem; /* More padding for nav links */
+    font-weight: bold; /* Make nav links bold for emphasis */
+}
+
+/* Make the toggler button visible and styled */
+.navbar-toggler {
+    border: none; /* Remove border */
+    background-color: transparent; /* Ensure the button itself is transparent */
+}
+
+    .navbar-toggler:focus {
+        outline: none; /* Remove outline on focus */
+    }
+
+/* Custom styles for the toggle icon to show three lines */
+.navbar-toggler-icon {
+    display: inline-block;
+    width: 30px; /* Adjust width for better visibility */
+    height: 30px; /* Set height for the icon */
+    position: relative;
+}
+
+    .navbar-toggler-icon::before,
+    .navbar-toggler-icon::after,
+    .navbar-toggler-icon div {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 4px; /* Height of each line */
+        background-color: white; /* Set color of the toggle lines to white */
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease; /* Add a transition for animation */
+    }
+
+    .navbar-toggler-icon::before {
+        top: 0; /* Position the top line */
+    }
+
+    .navbar-toggler-icon div {
+        top: 13px; /* Position the middle line */
+    }
+
+    .navbar-toggler-icon::after {
+        top: 26px; /* Position the bottom line */
+    }
+
+/* Optional: Add this to site.css */
+.table-responsive {
+    overflow-x: auto; /* Allow horizontal scrolling */
 }
 
 .container {
-    padding: 20px; /* Padding around the main content */
-    border-radius: 5px; /* Rounded corners */
-    background-color: white; /* White background for the content area */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+h2, h3 {
+    color: #343a40;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn {
+        width: 100%; /* Make the button full-width on smaller screens */
+    }
+
+    .navbar {
+        padding: 0.5rem 0; /* Adjust navbar padding for smaller screens */
+    }
+}
+
+@media print {
+    body {
+        -webkit-print-color-adjust: exact; /* Preserve background colors */
+        color-adjust: exact;
+    }
+
+    /* Hide elements you don't want to print */
+    .navbar, .btn {
+        display: none; /* Hide the navbar and buttons */
+    }
+
+    .container {
+        width: 100%; /* Full width for printing */
+        margin: 0; /* Remove margins */
+        padding: 20px; /* Add some padding */
+    }
 }

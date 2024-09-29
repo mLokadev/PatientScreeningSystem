@@ -1,0 +1,80 @@
+﻿<!-- File: Views/Patient/Report.cshtml -->
+@model IEnumerable<PatientScreeningSystem.Models.Patient>
+
+@{
+    ViewData["Title"] = "Patient Report";
+}
+
+<h2 class="text-center">Patient Report</h2>
+
+<form method="get" class="form-inline mb-4">
+    <div class="form-group mr-2">
+        <label for="bloodGroup">Filter by Blood Group:</label>
+        <select name="bloodGroup" class="form-control ml-2">
+            <option value="">All</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <label for="department">Filter by Department:</label>
+        <select name="department" class="form-control ml-2">
+            <option value="">All</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Radiology">Radiology</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<div class="table-responsive">
+    <!-- Add this div for responsiveness -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Aadhaar Number</th>
+                <th>Phone Number</th>
+                <th>Blood Group</th>
+                <th>Department</th>
+                <th>Reason for Visit</th>
+                <th>Entry Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td>@patient.PatientId</td>
+                    <td>@patient.Name</td>
+                    <td>@patient.Age</td>
+                    <td>@patient.Gender</td>
+                    <td>@patient.Address</td>
+                    <td>@patient.AadhaarNumber</td>
+                    <td>@patient.PhoneNumber</td>
+                    <td>@patient.BloodGroup</td>
+                    <td>@patient.Department</td>
+                    <td>@patient.ReasonForVisit</td>
+                    <td>@patient.EntryTime</td>
+                    <td>
+                        <a asp-action="ViewPatientDetails" asp-route-patientId="@patient.PatientId" class="btn btn-info">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> <!-- Closing div for responsiveness -->

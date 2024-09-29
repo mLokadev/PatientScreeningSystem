@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DinkToPdf;
+using DinkToPdf.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using PatientScreeningSystem.Data;
 using PatientScreeningSystem.Models;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace PatientScreeningSystem.Controllers
@@ -9,15 +12,19 @@ namespace PatientScreeningSystem.Controllers
     public class PatientController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IConverter _converter;  // DinkToPdf converter
 
-        public PatientController(AppDbContext context)
+        public PatientController(AppDbContext context, IConverter converter)
         {
             _context = context;
+            _converter = converter;  // Injecting the DinkToPdf converter
         }
 
         // Display the registration page
         public IActionResult Register()
         {
+            ViewBag.Departments = new[] { "Cardiology", "Dermatology", "Neurology", "Pediatrics", "Radiology" };
+            ViewBag.BloodGroups = new[] { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
             return View();
         }
 
@@ -32,6 +39,10 @@ namespace PatientScreeningSystem.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Success");
             }
+
+            // Repopulate dropdowns if model state is invalid
+            ViewBag.Departments = new[] { "Cardiology", "Dermatology", "Neurology", "Pediatrics", "Radiology" };
+            ViewBag.BloodGroups = new[] { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
             return View(patient);
         }
 
@@ -49,8 +60,9 @@ namespace PatientScreeningSystem.Controllers
         {
             return View();
         }
-       
-        // Display the edit patient page
+
+
+        // Action to search for a patient to edit
         public IActionResult Edit()
         {
             return View();
@@ -65,7 +77,6 @@ namespace PatientScreeningSystem.Controllers
 
             if (patient == null)
             {
-                // Set the ViewData flag to trigger the toast
                 ViewData["PatientNotFound"] = "true";
                 ModelState.AddModelError(string.Empty, "Patient not found");
                 return View();
@@ -73,7 +84,6 @@ namespace PatientScreeningSystem.Controllers
 
             return View("EditDetails", patient);
         }
-
 
         [HttpPost]
         public IActionResult Update(Patient patient)
@@ -101,42 +111,13 @@ namespace PatientScreeningSystem.Controllers
 
             return View("EditDetails", patient);
         }
-
-        //[HttpPost]
-        //public IActionResult RemovePatient(string patient)
-        //{
-        //    var patient = _context.Patients
-        //        .FirstOrDefault(p => p.PatientId.ToString() == patientIdOrName ||
-        //                             p.Name.ToLower() == patientIdOrName.ToLower());
-
-        //    if (patient == null)
-        //    {
-        //        // Set the ViewData flag to trigger the toast
-        //        ViewData["PatientNotFound"] = "true";
-        //        ModelState.AddModelError(string.Empty, "Patient not found");
-        //        return View("Delete");
-        //    }
-
-        //    try
-        //    {
-        //        _context.Patients.Remove(patient);
-        //        _context.SaveChanges();
-        //        return RedirectToAction("DeleteSuccess");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError(string.Empty, "An error occurred while deleting the patient.");
-        //        return View("Delete");
-        //    }
-        //}
-
         [HttpPost]
         public IActionResult RemovePatient(int patientId)
         {
             // Find the patient by PatientId
             var patient = _context.Patients.FirstOrDefault(p => p.PatientId == patientId);
 
-            
+
             try
             {
                 // Remove the patient from the database
@@ -153,6 +134,35 @@ namespace PatientScreeningSystem.Controllers
         }
 
 
+        // Action to view all patients and filter them
+        public IActionResult Report(string bloodGroup, string department)
+        {
+            var patients = _context.Patients.AsQueryable();
+
+            if (!string.IsNullOrEmpty(bloodGroup))
+            {
+                patients = patients.Where(p => p.BloodGroup == bloodGroup);
+            }
+
+            if (!string.IsNullOrEmpty(department))
+            {
+                patients = patients.Where(p => p.Department == department);
+            }
+
+            return View(patients.ToList());
+        }
+
+        
+      
+        public IActionResult ViewPatientDetails(int patientId)
+        {
+            var patient = _context.Patients.FirstOrDefault(p => p.PatientId == patientId);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            return View(patient);
+        }
 
     }
 }
